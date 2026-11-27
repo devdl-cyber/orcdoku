@@ -7,7 +7,7 @@ import { extname, join, normalize } from "node:path";
 const ROOT = process.cwd();
 const PORT = 8080;
 const TYPES = { ".html": "text/html", ".js": "text/javascript", ".mjs": "text/javascript",
-  ".css": "text/css", ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png" };
+  ".css": "text/css", ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png", ".webp": "image/webp" };
 
 createServer(async (req, res) => {
   let path = decodeURIComponent(new URL(req.url, "http://x").pathname);

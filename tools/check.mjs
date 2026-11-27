@@ -12,6 +12,16 @@ const files = process.argv.length > 2
 let bad = 0;
 for (const f of files) {
   const puzzle = JSON.parse(readFileSync(f, "utf8"));
+
+  // elke persoon moet met een andere letter beginnen (toetsenbord kiest op beginletter)
+  const letters = puzzle.people.map(p => p.name[0].toUpperCase());
+  const dubbel = letters.filter((l, i) => letters.indexOf(l) !== i);
+  if (dubbel.length) {
+    bad++;
+    console.log(`FOUT ${f}  -> zelfde beginletter: ${[...new Set(dubbel)].join(", ")}`);
+    continue;
+  }
+
   const sols = solve(puzzle, 5);
   if (sols.length === 1) {
     const killer = findKiller(puzzle, sols[0]);

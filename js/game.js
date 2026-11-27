@@ -52,6 +52,18 @@ async function start() {
   $("btn-reset").onclick = () => { state = emptyState(); selected = null; save(); render(); };
   $("btn-rules").onclick = () => $("dlg-rules").showModal();
   $("btn-xmode").onclick = () => { xMode = !xMode; render(); };
+  document.addEventListener("keydown", onKey);
+}
+
+// Toetsenbord: eerste letter van een naam kiest die persoon, Escape = niemand gekozen.
+function onKey(e) {
+  if (e.ctrlKey || e.altKey || e.metaKey || document.querySelector("dialog[open]")) return;
+  if (e.key === "Escape") { selected = null; render(); return; }
+  if (e.key.length !== 1) return;
+  const p = puzzle.people.find(x => x.name[0].toLowerCase() === e.key.toLowerCase());
+  if (!p) return;
+  e.preventDefault();
+  selectPerson(p.id);
 }
 
 // ---------- bord opbouwen ----------
@@ -75,7 +87,7 @@ function buildBoard() {
       const t = B.obj(r, c);
       if (t) {
         cell.classList.add(OBJECTS[t].walkable ? "walk" : "block", `obj-${t}`);
-        cell.insertAdjacentHTML("beforeend", `<span class="obj" title="${OBJECTS[t].name}">${OBJECTS[t].icon}</span>`);
+        cell.insertAdjacentHTML("beforeend", objIcon(t));
       }
       if (!labelled.has(B.room(r, c))) {
         labelled.add(B.room(r, c));
@@ -109,10 +121,16 @@ function attachPointer(cell, r, c) {
   cell.addEventListener("pointercancel", cancel);
 }
 
+// Voorwerp als losse afbeelding: assets/objects/<naam>.png
+function objIcon(t) {
+  const o = OBJECTS[t];
+  return `<img class="obj img" src="assets/objects/${t}.png" alt="${o.name}" title="${o.name}" draggable="false">`;
+}
+
 function buildLegend() {
   const used = [...new Set(puzzle.objects.map(o => o.type))];
   $("legend").innerHTML = used.map(t =>
-    `<li><span class="obj">${OBJECTS[t].icon}</span> ${OBJECTS[t].name}
+    `<li>${objIcon(t)} ${OBJECTS[t].name}
       <small>${OBJECTS[t].walkable ? "betreedbaar" : "geblokkeerd"}</small></li>`).join("");
 }
 
@@ -121,10 +139,11 @@ const whoAt = (r, c) => Object.keys(state.pos).find(id => state.pos[id][0] === r
 const nameOf = (id) => puzzle.people.find(p => p.id === id).name;
 
 // vakjes die automatisch ✗ zijn: zelfde rij/kolom als een definitief geplaatste persoon
+// (niet op voorwerpen waar je niet kan staan: die zijn al uitgesloten)
 function autoMarked(r, c) {
-  return Object.values(state.pos).some(([pr, pc]) => (pr === r) !== (pc === c));
+  return B.walkable(r, c) && Object.values(state.pos).some(([pr, pc]) => (pr === r) !== (pc === c));
 }
-const isMarked = (r, c) => state.marks.includes(key(r, c)) || autoMarked(r, c);
+const isMarked = (r, c) => B.walkable(r, c) && (state.marks.includes(key(r, c)) || autoMarked(r, c));
 
 function needSelection() {
   if (selected) return true;
@@ -176,6 +195,7 @@ function xAction(r, c) {
     save(); render();
     return;
   }
+  if (!B.walkable(r, c)) return;     // geblokkeerd voorwerp: ✗ is overbodig
   if (autoMarked(r, c)) return flash("Dit ✗ komt van een geplaatste persoon in dezelfde rij of kolom.");
   const k = key(r, c);
   if (state.marks.includes(k)) state.marks = state.marks.filter(x => x !== k);
@@ -190,8 +210,17 @@ function selectPerson(id) {
 }
 
 // ---------- tekenen ----------
+// Portret uit assets/avatars.webp: 6 kolommen x 4 rijen, index 0-23 (links orcs, rechts humans).
+const SHEET_COLS = 6, SHEET_ROWS = 4;
 function token(p, cls = "") {
-  return `<span class="token kind-${p.kind} ${cls}" title="${p.name} (${KIND_LABEL[p.kind]})">${p.name[0]}</span>`;
+  const title = `${p.name} (${KIND_LABEL[p.kind]})`;
+  // kandidaten (mini) en personen zonder portret: enkel de letter
+  if (p.avatar == null || cls.includes("mini"))
+    return `<span class="token kind-${p.kind} ${cls}" title="${title}">${p.name[0]}</span>`;
+  const x = (p.avatar % SHEET_COLS) / (SHEET_COLS - 1) * 100;
+  const y = Math.floor(p.avatar / SHEET_COLS) / (SHEET_ROWS - 1) * 100;
+  return `<span class="token avatar kind-${p.kind} ${cls}" title="${title}" role="img" aria-label="${p.name}"
+    style="background-position:${x}% ${y}%"><span class="badge kind-${p.kind}">${p.name[0]}</span></span>`;
 }
 
 function render() {
@@ -205,7 +234,7 @@ function render() {
     const p = id && puzzle.people.find(x => x.id === id);
     const cands = state.cands[key(r, c)] ?? [];
     let html = "";
-    if (p) html = token(p);
+    if (p) html = token(p, "big");
     else if (isMarked(r, c)) html = `<span class="mark${autoMarked(r, c) ? " auto" : ""}">✗</span>`;
     else if (cands.length) html = `<span class="cands">${puzzle.people.filter(x => cands.includes(x.id)).map(x => token(x, "mini")).join("")}</span>`;
     cell.querySelector(".slot").innerHTML = html;

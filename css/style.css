@@ -38,12 +38,14 @@ main { max-width: 1050px; margin: 0 auto; padding: 0 16px 40px; }
 .story { color: var(--muted); }
 
 .play { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; align-items: flex-start; }
-.board-wrap { flex: 1 1 360px; max-width: 520px; }
+.board-wrap { flex: 1 1 360px; max-width: 600px; }
 
 /* ---------- bord ---------- */
 .board {
   display: grid;
-  grid-template-columns: repeat(var(--n), 1fr);
+  /* minmax(0, 1fr): vakjes blijven even groot, wat er ook in staat */
+  grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+  grid-template-rows: repeat(var(--n), minmax(0, 1fr));
   aspect-ratio: 1;
   border: 4px solid var(--wall);
   background: var(--wall);
@@ -53,6 +55,9 @@ main { max-width: 1050px; margin: 0 auto; padding: 0 16px 40px; }
 
 .cell {
   position: relative;
+  container-type: size;   /* inhoud schaalt mee met het vakje (cqmin) */
+  overflow: hidden;
+  min-width: 0; min-height: 0;
   border: 1px solid rgba(0,0,0,.18);
   padding: 0;
   font: inherit;
@@ -74,10 +79,15 @@ main { max-width: 1050px; margin: 0 auto; padding: 0 16px 40px; }
 .room-K { background: var(--room-K); }
 
 .cell.block { background-image: repeating-linear-gradient(45deg, rgba(0,0,0,.10) 0 6px, transparent 6px 12px); cursor: not-allowed; }
-.cell.obj-tapijt { background-image: radial-gradient(circle, #b5483c 0 55%, #8c2f26 56% 62%, transparent 63%); }
-.cell.obj-tapijt .obj { display: none; }
 
 .obj { font-size: clamp(18px, 5vw, 32px); grid-area: 1 / 1; }
+.cell .obj { font-size: 45cqmin; }
+
+/* voorwerpen: losse afbeeldingen, passend in het vakje met behoud van verhouding */
+.obj.img { display: block; object-fit: contain; pointer-events: none; }
+.cell .obj.img { width: 84cqmin; height: 84cqmin; }
+.legend .obj.img { display: inline-block; width: 1.6em; height: 1.6em; vertical-align: middle; }
+.walk .obj.img { opacity: .8; }
 .walk .obj { opacity: .75; }
 .slot { grid-area: 1 / 1; z-index: 1; }
 
@@ -89,8 +99,8 @@ main { max-width: 1050px; margin: 0 auto; padding: 0 16px 40px; }
   pointer-events: none;
 }
 
-.mark { font-size: clamp(18px, 5vw, 30px); color: rgba(60, 30, 10, .55); font-weight: 700; }
-.mark.auto { color: rgba(60, 30, 10, .3); }
+.mark { font-size: 62cqmin; line-height: 1; color: rgba(15, 8, 2, .9); font-weight: 800; }
+.mark.auto { color: rgba(15, 8, 2, .6); }
 
 /* kandidaten: kleine icoontjes in een raster */
 .cands {
@@ -98,8 +108,8 @@ main { max-width: 1050px; margin: 0 auto; padding: 0 16px 40px; }
   place-content: center;
 }
 .token.mini {
-  width: clamp(12px, 3vw, 17px);
-  font-size: clamp(8px, 2vw, 11px);
+  width: 28cqmin;
+  font-size: 17cqmin;
   border-width: 1px;
 }
 
@@ -129,6 +139,28 @@ main { max-width: 1050px; margin: 0 auto; padding: 0 16px 40px; }
   border: 2px solid rgba(0,0,0,.5);
   color: #fff; font: 800 1.05rem "Cinzel", serif;
   flex: none;
+}
+.token.avatar {
+  background-color: var(--parchment);
+  background-image: url("../assets/avatars.webp");
+  background-size: 600% 400%;   /* 6 kolommen x 4 rijen */
+  border-width: 3px;
+}
+.token.avatar.kind-orc { border-color: var(--orc); }
+.token.avatar.kind-human { border-color: var(--human); }
+.token.avatar.kind-victim { border-color: var(--victim); background-color: #d9c6e3; }
+.token.avatar { position: relative; }
+.token.big { width: 80cqmin; }
+
+/* letter in het hoekje van het portret */
+.badge {
+  position: absolute; right: -4px; bottom: -4px;
+  width: 42%; min-width: 15px; aspect-ratio: 1;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  border: 2px solid var(--wall);
+  color: #fff;
+  font: 800 clamp(9px, 2.4vw, 15px)/1 "Cinzel", serif;
 }
 .kind-orc { background: var(--orc); }
 .kind-human { background: var(--human); }

@@ -7,20 +7,51 @@
 //  3. Elke aanwijzing klopt.
 //  4. De moordenaar is de enige verdachte die alleen met het slachtoffer in een kamer was.
 
+// Elk voorwerp heeft een afbeelding assets/objects/<naam>.png (uitgesneden met tools/slice-objects.ps1).
+// De emoji (icon) is reserve, als de afbeelding niet laadt.
 export const OBJECTS = {
-  // niet betreedbaar
-  kampvuur:  { name: "kampvuur",  icon: "🔥", walkable: false },
-  catapult:  { name: "catapult",  icon: "🏹", walkable: false },
-  rotshoop:  { name: "rotshoop",  icon: "🪨", walkable: false },
-  wapenrek:  { name: "wapenrek",  icon: "⚔️", walkable: false },
-  troon:     { name: "troon",     icon: "👑", walkable: false },
-  barrel:    { name: "barrel",    icon: "🛢️", walkable: false },
-  koe:       { name: "koe",       icon: "🐄", walkable: false },
-  aambeeld:  { name: "aambeeld",  icon: "⚒️", walkable: false },
-  // wel betreedbaar
-  tapijt:    { name: "tapijt",    icon: "🟥", walkable: true },
-  strobaal:  { name: "strobaal",  icon: "🌾", walkable: true },
-  bank:      { name: "bank",      icon: "🪑", walkable: true },
+  // ---- niet betreedbaar ----
+  catapult:     { name: "catapult",       icon: "🏹", walkable: false },
+  koe:          { name: "koe",            icon: "🐄", walkable: false },
+  wapenrek:     { name: "wapenrek",       icon: "⚔️", walkable: false },
+  smidsoven:    { name: "smidsoven",      icon: "🔥", walkable: false },
+  aambeeld:     { name: "aambeeld",       icon: "⚒️", walkable: false },
+  barrel:       { name: "barrel",         icon: "🛢️", walkable: false },
+  hooikar:      { name: "hooikar",        icon: "🛒", walkable: false },
+  orcbanier:    { name: "orcbanier",      icon: "🚩", walkable: false },
+  humanbanier:  { name: "humanbanier",    icon: "🏳️", walkable: false },
+  tent:         { name: "tent",           icon: "⛺", walkable: false },
+  kampvuur:     { name: "kampvuur",       icon: "🔥", walkable: false },
+  waterput:     { name: "waterput",       icon: "🪣", walkable: false },
+  kist:         { name: "kist",           icon: "🧰", walkable: false },
+  krat:         { name: "krat",           icon: "📦", walkable: false },
+  palissade:    { name: "palissade",      icon: "🪵", walkable: false },
+  muur:         { name: "muur",           icon: "🧱", walkable: false },
+  wachttoren:   { name: "wachttoren",     icon: "🗼", walkable: false },
+  orchut:       { name: "orchut",         icon: "🛖", walkable: false },
+  huisje:       { name: "huisje",         icon: "🏠", walkable: false },
+  droogrek:     { name: "droogrek",       icon: "🪜", walkable: false },
+  zuil:         { name: "zuil",           icon: "🏛️", walkable: false },
+  totem:        { name: "totem",          icon: "🗿", walkable: false },
+  schatkist:    { name: "schatkist",      icon: "💰", walkable: false },
+  houtstapel:   { name: "houtstapel",     icon: "🪵", walkable: false },
+  graanzak:     { name: "graanzak",       icon: "💰", walkable: false },
+  emmer:        { name: "emmer",          icon: "🪣", walkable: false },
+  voerbak:      { name: "voerbak",        icon: "🌾", walkable: false },
+  ketel:        { name: "ketel",          icon: "🍲", walkable: false },
+  bakoven:      { name: "bakoven",        icon: "🔥", walkable: false },
+  hakblok:      { name: "hakblok",        icon: "🪓", walkable: false },
+  kookvuur:     { name: "kookvuur",       icon: "🍲", walkable: false },
+  haard:        { name: "haard",          icon: "🔥", walkable: false },
+  deur:         { name: "deur",           icon: "🚪", walkable: false },
+  hek:          { name: "hek",            icon: "🚧", walkable: false },
+  // ---- wel betreedbaar ----
+  strobaal:     { name: "strobaal",       icon: "🌾", walkable: true },
+  tapijt:       { name: "tapijt",         icon: "🟥", walkable: true },
+  bank:         { name: "tafel met bank", icon: "🪑", walkable: true },
+  bed:          { name: "bed",            icon: "🛏️", walkable: true },
+  orcbed:       { name: "orcbed",         icon: "🛏️", walkable: true },
+  ladder:       { name: "ladder",         icon: "🪜", walkable: true },
 };
 
 const DIRS = [[-1, 0], [1, 0], [0, -1], [0, 1]]; // "naast" = boven, onder, links, rechts
