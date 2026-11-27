@@ -1,0 +1,11 @@
+{
+  "name": "orcdoku",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Fantasy-moordpuzzels op een raster: orcs, humans en één dode gezant.",
+  "scripts": {
+    "check": "node tools/check.mjs",
+    "serve": "node tools/serve.mjs"
+  }
+}

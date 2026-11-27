@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Orcdoku</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Alegreya+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Orcdoku</h1>
+    <p class="tagline">Orcs, humans en één dode gezant</p>
+  </header>
+
+  <main>
+    <section class="case">
+      <h2 id="title">…</h2>
+      <p id="story" class="story"></p>
+    </section>
+
+    <div class="play">
+      <div class="board-wrap">
+        <div id="board" class="board" role="grid" aria-label="Plaats delict"></div>
+        <div class="buttons">
+          <button id="btn-reset" type="button">Opnieuw</button>
+          <button id="btn-rules" type="button">Regels</button>
+        </div>
+        <p id="status" class="status" aria-live="polite"></p>
+      </div>
+
+      <aside class="side">
+        <h3>Personen</h3>
+        <p class="hint">Kies een persoon en klik op een vakje. Rechtsklik (of klik zonder persoon) zet een ✗.</p>
+        <ul id="people" class="people"></ul>
+        <h3>Feiten</h3>
+        <ul id="facts" class="facts"></ul>
+        <h3>Legende</h3>
+        <ul id="legend" class="legend"></ul>
+      </aside>
+    </div>
+  </main>
+
+  <dialog id="dlg-rules">
+    <h2>Regels</h2>
+    <ol>
+      <li>In elke <b>rij</b> en elke <b>kolom</b> staat precies één persoon.</li>
+      <li>Niemand staat op een voorwerp dat <b>niet betreedbaar</b> is. Op een tapijt, strobaal of bank mag je wel staan.</li>
+      <li>Alle aanwijzingen en feiten kloppen. <i>"Naast"</i> betekent: direct erboven, eronder, links of rechts.</li>
+      <li>De <b>moordenaar</b> is de enige verdachte die alleen met het slachtoffer in een kamer was.</li>
+    </ol>
+    <form method="dialog"><button>Begrepen</button></form>
+  </dialog>
+
+  <dialog id="dlg-win">
+    <h2>Zaak opgelost!</h2>
+    <p id="win-text"></p>
+    <form method="dialog"><button>Hoera</button></form>
+  </dialog>
+
+  <script type="module" src="js/game.js"></script>
+</body>
+</html>

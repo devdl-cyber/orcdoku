@@ -1,0 +1,65 @@
+{
+  "id": "zaak-001",
+  "title": "De Laatste Vredesgezant",
+  "difficulty": "makkelijk",
+  "story": "Orcs en humans zouden vrede sluiten in het grensfort. De elfse gezant Elowen zou bemiddelen. Bij zonsopgang ligt ze dood in de troonzaal. Wie heeft het gedaan?",
+  "size": 6,
+  "rooms": {
+    "O": { "name": "Orckamp" },
+    "T": { "name": "Troonzaal" },
+    "S": { "name": "Stal" },
+    "F": { "name": "Smidse" },
+    "K": { "name": "Taverne" }
+  },
+  "layout": [
+    "OOOTTT",
+    "OOOTTT",
+    "OOSSTT",
+    "FFSSKK",
+    "FFSSKK",
+    "FFFKKK"
+  ],
+  "objects": [
+    { "type": "kampvuur", "r": 0, "c": 0 },
+    { "type": "catapult", "r": 1, "c": 1 },
+    { "type": "wapenrek", "r": 1, "c": 2 },
+    { "type": "rotshoop", "r": 2, "c": 0 },
+    { "type": "troon",    "r": 0, "c": 4 },
+    { "type": "tapijt",   "r": 1, "c": 3 },
+    { "type": "tapijt",   "r": 1, "c": 4 },
+    { "type": "barrel",   "r": 2, "c": 4 },
+    { "type": "koe",      "r": 2, "c": 2 },
+    { "type": "koe",      "r": 3, "c": 3 },
+    { "type": "strobaal", "r": 3, "c": 2 },
+    { "type": "strobaal", "r": 4, "c": 3 },
+    { "type": "aambeeld", "r": 4, "c": 0 },
+    { "type": "wapenrek", "r": 5, "c": 1 },
+    { "type": "barrel",   "r": 3, "c": 4 },
+    { "type": "bank",     "r": 4, "c": 5 },
+    { "type": "bank",     "r": 5, "c": 4 },
+    { "type": "barrel",   "r": 5, "c": 5 }
+  ],
+  "people": [
+    { "id": "elowen",  "name": "Elowen",  "kind": "victim",
+      "clue": "De gezant werd gevonden op een tapijt.",
+      "rules": [{ "type": "on", "object": "tapijt" }] },
+    { "id": "grishak", "name": "Grishak", "kind": "orc",
+      "clue": "Grishak warmde zich naast het kampvuur, vlak bij de catapult.",
+      "rules": [{ "type": "nextTo", "object": "catapult" }, { "type": "nextTo", "object": "kampvuur" }] },
+    { "id": "urzog",   "name": "Urzog",   "kind": "orc",
+      "clue": "Urzog zweert dat hij nooit in de smidse of de taverne kwam.",
+      "rules": [{ "type": "notInRoom", "room": "F" }, { "type": "notInRoom", "room": "K" }] },
+    { "id": "morgra",  "name": "Morgra",  "kind": "orc",
+      "clue": "Morgra stond naast het aambeeld.",
+      "rules": [{ "type": "nextTo", "object": "aambeeld" }] },
+    { "id": "aldric",  "name": "Aldric",  "kind": "human",
+      "clue": "Aldric zat op een strobaal.",
+      "rules": [{ "type": "on", "object": "strobaal" }] },
+    { "id": "brenna",  "name": "Brenna",  "kind": "human",
+      "clue": "Brenna was in de smidse.",
+      "rules": [{ "type": "inRoom", "room": "F" }] }
+  ],
+  "facts": [
+    { "type": "roomEmpty", "room": "K", "text": "De taverne was die nacht gesloten: er was niemand." }
+  ]
+}

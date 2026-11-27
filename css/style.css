@@ -1,0 +1,143 @@
+:root {
+  --bg: #1d1712;
+  --panel: #2a2119;
+  --parchment: #efe2c4;
+  --ink: #2b1d10;
+  --text: #eadfc8;
+  --muted: #b3a283;
+  --accent: #c9822b;
+  --wall: #120c07;
+  --orc: #4f7d32;
+  --human: #3d6b9a;
+  --victim: #8a4fa3;
+  --danger: #c0392b;
+
+  --room-O: #b9c79a;  /* orckamp  */
+  --room-T: #d9b98c;  /* troonzaal */
+  --room-S: #e3cf8f;  /* stal     */
+  --room-F: #c4a99a;  /* smidse   */
+  --room-K: #cdb4c9;  /* taverne  */
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 17px/1.45 "Alegreya Sans", system-ui, sans-serif;
+}
+
+header { text-align: center; padding: 24px 16px 8px; }
+h1, h2, h3 { font-family: "Cinzel", Georgia, serif; margin: 0 0 8px; }
+h1 { font-size: 2.4rem; color: var(--accent); letter-spacing: 2px; }
+.tagline { margin: 0; color: var(--muted); }
+
+main { max-width: 1050px; margin: 0 auto; padding: 0 16px 40px; }
+.case { text-align: center; margin: 16px auto 20px; max-width: 680px; }
+.story { color: var(--muted); }
+
+.play { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; align-items: flex-start; }
+.board-wrap { flex: 1 1 360px; max-width: 520px; }
+
+/* ---------- bord ---------- */
+.board {
+  display: grid;
+  grid-template-columns: repeat(var(--n), 1fr);
+  aspect-ratio: 1;
+  border: 4px solid var(--wall);
+  background: var(--wall);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.cell {
+  position: relative;
+  border: 1px solid rgba(0,0,0,.18);
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+}
+.cell:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; z-index: 2; }
+.wall-t { border-top: 3px solid var(--wall); }
+.wall-l { border-left: 3px solid var(--wall); }
+.wall-b { border-bottom: 3px solid var(--wall); }
+.wall-r { border-right: 3px solid var(--wall); }
+
+.room-O { background: var(--room-O); }
+.room-T { background: var(--room-T); }
+.room-S { background: var(--room-S); }
+.room-F { background: var(--room-F); }
+.room-K { background: var(--room-K); }
+
+.cell.block { background-image: repeating-linear-gradient(45deg, rgba(0,0,0,.10) 0 6px, transparent 6px 12px); cursor: not-allowed; }
+.cell.obj-tapijt { background-image: radial-gradient(circle, #b5483c 0 55%, #8c2f26 56% 62%, transparent 63%); }
+.cell.obj-tapijt .obj { display: none; }
+
+.obj { font-size: clamp(18px, 5vw, 32px); grid-area: 1 / 1; }
+.walk .obj { opacity: .75; }
+.slot { grid-area: 1 / 1; z-index: 1; }
+
+.room-name {
+  position: absolute; top: 2px; left: 4px;
+  font: 700 10px/1 "Alegreya Sans", sans-serif;
+  text-transform: uppercase; letter-spacing: .5px;
+  color: rgba(43, 29, 16, .7);
+  pointer-events: none;
+}
+
+.mark { font-size: clamp(18px, 5vw, 30px); color: rgba(60, 30, 10, .55); font-weight: 700; }
+.cell.target:not(.block) { box-shadow: inset 0 0 0 3px rgba(201, 130, 43, .7); }
+.cell.conflict .token { box-shadow: 0 0 0 3px var(--danger); }
+
+/* ---------- personen ---------- */
+.token {
+  display: inline-grid; place-items: center;
+  width: clamp(28px, 7vw, 42px); aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2px solid rgba(0,0,0,.5);
+  color: #fff; font: 800 1.05rem "Cinzel", serif;
+  flex: none;
+}
+.kind-orc { background: var(--orc); }
+.kind-human { background: var(--human); }
+.kind-victim { background: var(--victim); }
+
+.side { flex: 1 1 300px; max-width: 420px; background: var(--panel); padding: 16px; border-radius: 8px; }
+.side h3 { margin-top: 16px; font-size: 1rem; color: var(--accent); }
+.side h3:first-child { margin-top: 0; }
+.hint { font-size: .9rem; color: var(--muted); margin-top: 0; }
+
+.people, .facts, .legend { list-style: none; margin: 0; padding: 0; }
+.person {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 8px; margin-bottom: 6px;
+  border-radius: 6px; cursor: pointer;
+  border: 2px solid transparent;
+}
+.person:hover { background: rgba(255,255,255,.05); }
+.person.selected { border-color: var(--accent); background: rgba(201,130,43,.12); }
+.person.placed { opacity: .6; }
+.person small, .legend small { color: var(--muted); }
+.facts li { padding: 4px 0; }
+.legend { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; }
+.legend .obj { font-size: 1.1rem; }
+
+/* ---------- knoppen & dialogen ---------- */
+.buttons { display: flex; gap: 8px; margin-top: 12px; }
+button { font: inherit; }
+.buttons button, dialog button {
+  background: var(--accent); color: #1d1206; border: 0;
+  padding: 8px 16px; border-radius: 6px; font-weight: 700; cursor: pointer;
+}
+.status { min-height: 1.5em; color: var(--muted); }
+
+dialog {
+  background: var(--parchment); color: var(--ink);
+  border: 3px solid var(--wall); border-radius: 8px;
+  max-width: min(520px, calc(100vw - 32px));
+}
+dialog::backdrop { background: rgba(0,0,0,.6); }
